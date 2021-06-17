@@ -10,4 +10,17 @@ describe('ToDoList.vue', () => {
     expect(wrapper.text()).toMatch(title)
   })
 
+  it('add some todo and see on the list', async () => {
+    const wrapper = shallowMount(ToDoList, {})
+
+    const todoText = 'some todo';
+    wrapper.find("input").setValue(todoText);
+    await wrapper.find("button").trigger('click');
+
+    wrapper.vm.$nextTick(() => {
+      expect(wrapper.find("ul").text()).toMatch(todoText)
+      done()
+    });
+  })
+
 })
