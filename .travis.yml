@@ -10,6 +10,6 @@ script:
 
 deploy:
   provider: gae
-  keyfile: "client-secret.json"
+  keyfile: "credentials.tar.gz.enc"
   project: "modanisa.challenge"
   on: main
