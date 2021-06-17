@@ -40,7 +40,7 @@ export default {
   },
   methods: {
     addNewTodo: function () {
-      fetch("http://localhost:3000/todos", {
+      fetch("http://localhost:100000/todos", {
         method: "post",
         headers: {
           "content-type": "application/json",
@@ -75,7 +75,7 @@ export default {
     },
     fetchData: function () {
       this.loading = true;
-      return fetch("http://localhost:3000/todos", {
+      return fetch("http://localhost:100000/todos", {
         method: "get",
         headers: {
           "content-type": "application/json",
