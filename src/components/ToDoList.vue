@@ -22,7 +22,7 @@
 </template>
 
 <script>
-import { ref, onMounted } from "vue";
+import { ref } from "vue";
 import fetch from "node-fetch";
 
 export default {
@@ -30,13 +30,51 @@ export default {
   props: {
     title: String,
   },
-  setup() {
-    const data = ref(null);
-    const loading = ref(true);
-    const error = ref(null);
+  data() {
+    return {
+      newToDo: "",
+      data: ref(null),
+      loading: ref(true),
+      errot: ref(null),
+    };
+  },
+  methods: {
+    addNewTodo: function () {
+      fetch("http://localhost:3000/todos", {
+        method: "post",
+        headers: {
+          "content-type": "application/json",
+        },
+        body: JSON.stringify({ title: this.newToDo }),
+      })
+        .then((res) => {
+          if (!res.ok) {
+            const error = new Error(res.statusText);
+            error.json = res.json();
+            throw error;
+          }
 
-    function fetchData() {
-      loading.value = true;
+          return res.json();
+        })
+        .then((json) => {
+          console.log(json);
+          this.newToDo = "";
+          this.fetchData();
+        })
+        .catch((err) => {
+          this.error = err;
+          if (err.json) {
+            return err.json.then((json) => {
+              this.error.message = json.message;
+            });
+          }
+        })
+        .then(() => {
+          this.loading = false;
+        });
+    },
+    fetchData: function () {
+      this.loading = true;
       return fetch("http://localhost:3000/todos", {
         method: "get",
         headers: {
@@ -53,48 +91,26 @@ export default {
           return res.json();
         })
         .then((json) => {
-          data.value = json;
+          this.data = json;
         })
         .catch((err) => {
-          error.value = err;
+          this.error = err;
           if (err.json) {
             return err.json.then((json) => {
-              error.value.message = json.message;
+              this.error.message = json.message;
             });
           }
         })
         .then(() => {
-          loading.value = false;
+          this.loading = false;
         });
-    }
-
-    onMounted(() => {
-      fetchData();
-    });
-
-    return {
-      data,
-      loading,
-      error,
-    };
-  },
-  data() {
-    return {
-      newToDo: "",
-    };
-  },
-  methods: {
-    addNewTodo: function () {
-      this.data.unshift({
-        id: "",
-        title: this.newToDo,
-      });
-
-      this.newToDo = "";
     },
     markAsDone: function () {
       console.log("Done");
     },
+  },
+  mounted: function () {
+    this.fetchData();
   },
 };
 </script>
