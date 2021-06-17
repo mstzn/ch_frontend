@@ -52,10 +52,7 @@
     ]
   },
   "jest": {
-    "automock": false,
-    "setupFiles": [
-      "./setupJest.js"
-    ]
+    "automock": false
   },
   "browserslist": [
     "> 1%",

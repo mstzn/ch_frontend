@@ -7,4 +7,4 @@ docker.stop:
 	docker-compose down;
 
 test.unit:
-	node ./node_modules/.bin/vue-cli-service test:unit --runInBand;
+	node ./node_modules/.bin/vue-cli-service test:unit --runInBand

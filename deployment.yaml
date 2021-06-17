@@ -41,7 +41,7 @@ spec:
   - http:
       paths:
       - backend:
-          service:
+          service:  
             name: frontend-service
             port:
               number: 80
